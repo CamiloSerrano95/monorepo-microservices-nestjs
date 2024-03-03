@@ -5,7 +5,7 @@ import { ClientProxy } from '@nestjs/microservices';
 export class AppService {
   private readonly logger = new Logger(AppService.name);c
 
-  constructor(@Inject('CLIENT_PROXY') private readonly client: ClientProxy) {}
+  constructor(@Inject('USER_SERVICE') private readonly client: ClientProxy) {}
 
   newUser(user:any) {
     this.logger.debug('The user has been created and the event has been broadcasted')

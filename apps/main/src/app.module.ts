@@ -1,29 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
     ClientsModule.register([
-      { name: 'USER_SERVICE', transport: Transport.TCP },
+      { 
+        name: 'USER_SERVICE', 
+        transport: Transport.TCP, 
+        options: {
+          host: 'localhost',
+          port: 3000
+        }
+      }
     ]),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: 'CLIENT_PROXY',
-      useFactory: () => {
-        return ClientProxyFactory.create({
-          transport: Transport.TCP,
-          options: {
-            host: 'user',
-            port: 3000,
-          },
-        });
-      }
-    }
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
