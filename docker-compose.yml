@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  main:
+    container_name: main-app
+    image: main-app:1.0.0
+    build:
+      context: .
+    command: npm run main:app
+    ports:
+      - 3001:3001
+    networks:
+      - monorepo-microservice-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  user:
+    container_name: user-app
+    image: user-app:1.0.0
+    build:
+      context: .
+    command: npm run user:app
+    ports:
+      - 3000:3000
+    networks:
+      - monorepo-microservice-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+networks:
+  monorepo-microservice-network:
+    driver: bridge
