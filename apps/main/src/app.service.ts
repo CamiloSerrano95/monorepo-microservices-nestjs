@@ -1,20 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AppService {
-  private readonly logger = new Logger(AppService.name);
-  private client: ClientProxy;
+  private readonly logger = new Logger(AppService.name);c
 
-  constructor() {
-    this.client = ClientProxyFactory.create({
-      transport: Transport.TCP,
-      options: {
-        host: 'user',
-        port: 3000,
-      },
-    });
-  }
+  constructor(@Inject('CLIENT_PROXY') private readonly client: ClientProxy) {}
 
   newUser(user:any) {
     this.logger.debug('The user has been created and the event has been broadcasted')

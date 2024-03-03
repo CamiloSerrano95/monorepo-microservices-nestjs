@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -10,6 +10,20 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'CLIENT_PROXY',
+      useFactory: () => {
+        return ClientProxyFactory.create({
+          transport: Transport.TCP,
+          options: {
+            host: 'user',
+            port: 3000,
+          },
+        });
+      }
+    }
+  ],
 })
 export class AppModule {}
